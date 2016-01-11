@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fuchu.Xunit", "Fuchu.Xunit\Fuchu.Xunit.fsproj", "{CCDF1CAC-D53A-4A7A-887D-8D3F1353D773}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fuchu.Xunit.Tests", "Fuchu.Xunit.Tests\Fuchu.Xunit.Tests.fsproj", "{6C52949F-24D9-4E16-803F-CAA898C23639}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CCDF1CAC-D53A-4A7A-887D-8D3F1353D773}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCDF1CAC-D53A-4A7A-887D-8D3F1353D773}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCDF1CAC-D53A-4A7A-887D-8D3F1353D773}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCDF1CAC-D53A-4A7A-887D-8D3F1353D773}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C52949F-24D9-4E16-803F-CAA898C23639}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C52949F-24D9-4E16-803F-CAA898C23639}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C52949F-24D9-4E16-803F-CAA898C23639}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C52949F-24D9-4E16-803F-CAA898C23639}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
