@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{FC7B24AC-479A-4D04-BE56-ACFC96ED04FD}"
+	ProjectSection(SolutionItems) = preProject
+		paket.dependencies = paket.dependencies
+	EndProjectSection
+EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fuchu.Xunit", "Fuchu.Xunit\Fuchu.Xunit.fsproj", "{CCDF1CAC-D53A-4A7A-887D-8D3F1353D773}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fuchu.Xunit.Tests", "Fuchu.Xunit.Tests\Fuchu.Xunit.Tests.fsproj", "{6C52949F-24D9-4E16-803F-CAA898C23639}"

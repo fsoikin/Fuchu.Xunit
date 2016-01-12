@@ -74,7 +74,7 @@ type TestCase(bus, methd, display, label) =
   interface ITestCase with
     member x.DisplayName = display
 
-  override this.RunAsync (_, bus:IMessageBus, _, _, cancel): Task<RunSummary> =
+  override this.RunAsync (_, bus:IMessageBus, _, _, _): Task<RunSummary> =
     let test = XunitTest(this, this.DisplayName)
     let post (m: #IMessageSinkMessage) = bus.QueueMessage <| m |> ignore
 
