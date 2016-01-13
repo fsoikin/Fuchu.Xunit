@@ -12,6 +12,12 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fuchu.Xunit", "Fuchu.Xunit\
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fuchu.Xunit.Tests", "Fuchu.Xunit.Tests\Fuchu.Xunit.Tests.fsproj", "{6C52949F-24D9-4E16-803F-CAA898C23639}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D778BD4D-A821-4D51-B76F-DC6E7613EA0E}"
+	ProjectSection(SolutionItems) = preProject
+		build.fsx = build.fsx
+		build.ps1 = build.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

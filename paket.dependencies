@@ -1,5 +1,7 @@
 source https://www.nuget.org/api/v2/
 
+nuget FAKE
+
 nuget FSharpx.Extras 1.10.3 framework: >= net45
 nuget FsUnit.xUnit 1.4.1.0 framework: >= net45
 nuget Fuchu 1.0.2.0 framework: >= net45
