@@ -36,11 +36,6 @@ module Discovery =
     else 
       None
 
-  /// In the flat sequence of pairs (label, TestCode) finds a particular TestCode by its label
-  let findTestByLabel label =
-    Seq.tryFind (fst >> (=) label)
-    >> Option.map (snd >> Fuchu.TestCase)
-
   /// Given "parent" label (i.e. from parent test tree node) and "child" one, produces effective compound label
   let nestLabel parent child = sprintf "%s %s" parent child
 
@@ -48,17 +43,16 @@ module Discovery =
 module Run =
   /// When given a test tree consisting of a single node, runs that node and returns result.
   /// Otherwise, returns None.
-  let runTest test = 
-    match Fuchu.Impl.evalSeq test with
-    | [res] -> Some res
-    | _ ->  None
+  let runTests tests = Fuchu.Impl.evalSeq tests
 
-  // Utilities for producing Xunit `RunSummary` from various outcomes
   let (|Seconds|) (t: TimeSpan) = decimal t.TotalSeconds
-  let success time = RunSummary(Total=1, Time=time)
-  let fail time = RunSummary(Total=1, Failed=1, Time=time)
-  let skip = RunSummary(Total=1, Skipped=1)
-  let err time = RunSummary(Total=0, Failed=0, Skipped=0, Time=time)
+
+  let fuchuResultToXunitResult test result : (IMessageSinkMessage * RunSummary) = 
+    match result with
+    | { Result = Failed err; Time = (Seconds s) } -> TestFailed(test, s, err, null) :> _, RunSummary(Total=1, Failed=1, Time=s)
+    | { Result = Error ex; Time = (Seconds s) } -> TestFailed(test, s, null, ex) :> _, RunSummary(Total=0, Failed=0, Time=s)
+    | { Result = Ignored reason } -> TestSkipped(test, reason) :> _, RunSummary(Total=1, Skipped=1)
+    | { Result = Passed; Time = (Seconds s) } -> TestPassed(test, s, null) :> _, RunSummary(Total=1, Time=s)
 
 /// Implementation of Xunit test case
 type TestCase(bus, methd, display, label) = 
@@ -76,26 +70,39 @@ type TestCase(bus, methd, display, label) =
 
   override this.RunAsync (_, bus:IMessageBus, _, _, _): Task<RunSummary> =
     let test = XunitTest(this, this.DisplayName)
-    let post (m: #IMessageSinkMessage) = bus.QueueMessage <| m |> ignore
+    let post (m: #IMessageSinkMessage) = bus.QueueMessage m |> ignore
 
     let run = async { 
         post (TestStarting test)
 
-        let res = maybe {
-          let! tests = fuchuTestsFromTestMethod this.TestMethod 
-          let flatList = tests |> casesFromFuchu (fun l code -> l, code) nestLabel 
-          let! label = this.TestMethodArguments |> emptyIfNull |> ofType<string> |> maybeFirst
-          let! test = findTestByLabel label flatList
-          return! runTest test
-        }
+        let maybeSummary = 
+          maybe {
+            let! tests = fuchuTestsFromTestMethod this.TestMethod 
+            let flatList = tests |> casesFromFuchu (fun l code -> l, code) nestLabel 
+            let! label = this.TestMethodArguments |> emptyIfNull |> ofType<string> |> maybeFirst
+
+            let results = 
+              flatList
+              |> Seq.filter (fst >> (=) label) // Find "our" tests
+              |> Seq.collect (snd >> Fuchu.TestCase >> Fuchu.Impl.evalSeq) // Rewrap them in Fuchu TestCase, have Fuchu run them
+              |> Seq.map (fuchuResultToXunitResult test) // Convert Fuchu results to Xunit message + Xunit summary
+              |> Seq.toList // Persist the resulting list, don't do all the above twice
+
+            // Post messages to let Xunit know of what's happening
+            results |> Seq.iter (fst >> post)
+
+            // Fold all summaries in (yeah, this is kinda ugly, but this is the API that Xunit offers)
+            let summary = RunSummary()
+            results |> Seq.iter (snd >> summary.Aggregate)
+
+            // Return the summary
+            return summary
+          }
 
         let summary =
-          match res with
-          | Some { Result = Failed err; Time = (Seconds s) } -> post <| TestFailed(test, s, err, null); fail s
-          | Some { Result = Error ex; Time = (Seconds s) } -> post <| TestFailed(test, s, null, ex); err s
-          | Some { Result = Ignored reason } -> post <| TestSkipped(test, reason); skip
-          | Some { Result = Passed; Time = (Seconds s) } -> post <| TestPassed(test, s, null); success s
-          | _ -> post <| TestSkipped(test, "Unknown error"); skip
+          match maybeSummary with
+          | Some s -> s
+          | None -> post <| TestSkipped(test, "Unknown error"); RunSummary(Total=1, Skipped=1) // TODO: better reporting
         
         return summary
       }
@@ -103,10 +110,15 @@ type TestCase(bus, methd, display, label) =
     
 /// Produces list of Fuchu tests associated with given method, wrapping them up as Xunit test cases.
 let discover (testMethod: ITestMethod) bus =
-  let makeCase label _ = 
+  let makeCase label = 
     let display = sprintf "%s.%s%s" testMethod.TestClass.Class.Name testMethod.Method.Name label
     new TestCase(bus, testMethod, display, label)
 
+  let justLabel label _ = label
+
   fuchuTestsFromTestMethod testMethod
-  |> Option.map (casesFromFuchu makeCase nestLabel)
+  |> Option.map (
+    casesFromFuchu justLabel nestLabel
+    >> Seq.distinct 
+    >> Seq.map makeCase )
   |> orElse Seq.empty

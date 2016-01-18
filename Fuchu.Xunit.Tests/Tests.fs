@@ -13,4 +13,8 @@ let [<FuchuTests>] ``My component``() =
           i-i |> should equal 0 
         } 
     }
+
+    test "dupe" { 1+2 |> should equal 3 }
+    test "dupe" { 2+2 |> should equal 3 }
+    test "dupe" { 3+2 |> should equal 3 }
   ]
