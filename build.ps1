@@ -4,4 +4,4 @@ if ($lastexitcode -ne 0) { exit }
 & "$PSScriptRoot\.paket\paket.exe" restore
 if ($lastexitcode -ne 0) { exit }
 
-& "$PSScriptRoot\packages\FAKE\tools\FAKE.exe" "$PSScriptRoot\build.fsx" $args
+& "$PSScriptRoot\packages\build\FAKE\tools\FAKE.exe" "$PSScriptRoot\build.fsx" $args
