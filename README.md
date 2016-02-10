@@ -3,6 +3,8 @@ Fuchu.Xunit is a binding for running tests written in Fuchu framework with xUnit
 
 ![Travis CI build](https://travis-ci.org/erecruit/Fuchu.Xunit.svg?branch=master)
 
+[Install as NuGet package](https://www.nuget.org/packages/Fuchu.Xunit/): `Install-Package Fuchu.Xunit`
+
 # Getting started
 To have your tests picked up by xUnit infrastructure, declare a function `() -> Fuchu.Test` and mark it with `[<FuchuTests>]`, e.g.:
 
