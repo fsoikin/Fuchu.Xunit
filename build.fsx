@@ -1,8 +1,6 @@
 #r @"packages/FAKE/tools/FakeLib.dll"
 open Fake
 
-RestorePackages()
-
 let config = getBuildParamOrDefault "Config" "Debug"
 
 Target "Build" <| fun _ ->
