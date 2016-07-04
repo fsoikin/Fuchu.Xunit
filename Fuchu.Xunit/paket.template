@@ -1,4 +1,9 @@
 ﻿type project
 id Fuchu.Xunit
-authors Fyodor Soikin
-version 0.2.0
+version 0.2.1
+tags Fuchu XUnit test F#
+projectUrl https://github.com/erecruit/Fuchu.Xunit
+licenseUrl https://github.com/erecruit/Fuchu.Xunit/blob/master/LICENSE
+authors erecruit, Fyodor Soikin
+owners erecruit
+copyright erecruit 2016

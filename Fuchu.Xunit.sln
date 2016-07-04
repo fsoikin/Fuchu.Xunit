@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{FC7B24AC-479A-4D04-BE56-ACFC96ED04FD}"
 	ProjectSection(SolutionItems) = preProject
@@ -14,8 +14,16 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fuchu.Xunit.Tests", "Fuchu.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D778BD4D-A821-4D51-B76F-DC6E7613EA0E}"
 	ProjectSection(SolutionItems) = preProject
+		.travis.yml = .travis.yml
 		build.fsx = build.fsx
 		build.ps1 = build.ps1
+		build.sh = build.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{2D640C9F-B269-4E5B-8A4C-8CB2EBAFD524}"
+	ProjectSection(SolutionItems) = preProject
+		build\PatchVersion.fsx = build\PatchVersion.fsx
+		build\Publish.fsx = build\Publish.fsx
 	EndProjectSection
 EndProject
 Global
@@ -35,5 +43,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2D640C9F-B269-4E5B-8A4C-8CB2EBAFD524} = {D778BD4D-A821-4D51-B76F-DC6E7613EA0E}
 	EndGlobalSection
 EndGlobal

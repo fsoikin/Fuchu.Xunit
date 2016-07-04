@@ -1,9 +1,12 @@
 #r @"packages/build/FAKE/tools/FakeLib.dll"
+#load "./build/Publish.fsx"
+#load "./build/PatchVersion.fsx"
 open Fake
 
 let config = getBuildParamOrDefault "Config" "Debug"
 
 Target "Build" <| fun _ ->
+  PatchVersion.patchVersion "./Fuchu.Xunit/AssemblyInfo.fs"
   ["Fuchu.Xunit/Fuchu.Xunit.fsproj"]
   |> MSBuild "" "Build" ["Configuration", config]
   |> Log "Build: "
@@ -22,6 +25,8 @@ Target "RunTests" <| fun _ ->
   [sprintf "Fuchu.Xunit.Tests/bin/%s/Fuchu.Xunit.Tests.dll" config]
   |> Fake.Testing.XUnit2.xUnit2 id
 
-"Build" ==> "BuildTests" ==> "RunTests"
+Target "Publish" <| Publish.publishPackage config "./Fuchu.Xunit/paket.template"
+
+"Build" ==> "BuildTests" ==> "RunTests" ==> "Publish"
 
 RunTargetOrDefault "Build"
