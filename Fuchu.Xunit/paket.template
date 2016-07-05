@@ -1,6 +1,5 @@
 ﻿type project
 id Fuchu.Xunit
-version 0.2.1
 tags Fuchu XUnit test F#
 projectUrl https://github.com/erecruit/Fuchu.Xunit
 licenseUrl https://github.com/erecruit/Fuchu.Xunit/blob/master/LICENSE
